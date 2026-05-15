@@ -1,0 +1,52 @@
+class Solution {
+public:
+    bool possible(vector<int>& arr, int k, int limit) {
+        int students = 1;
+        int pages = 0;
+
+        for (int i = 0; i < arr.size(); i++) {
+
+            if (arr[i] > limit)
+                return false;
+
+            if (pages + arr[i] > limit) {
+                students++;
+                pages = arr[i];
+            } else {
+                pages += arr[i];
+            }
+        }
+
+        return students <= k;
+    }
+
+    int findPages(vector<int> &arr, int k) {
+
+        int n = arr.size();
+
+        if (k > n)
+            return -1;
+
+        int low = *max_element(arr.begin(), arr.end());
+        int high = 0;
+
+        for (int x : arr)
+            high += x;
+
+        int ans = high;
+
+        while (low <= high) {
+
+            int mid = low + (high - low) / 2;
+
+            if (possible(arr, k, mid)) {
+                ans = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+};
